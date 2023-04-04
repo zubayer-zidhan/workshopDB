@@ -16,7 +16,7 @@ import (
 )
 
 func main() {
-
+	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(".env file could not be loaded")
@@ -25,6 +25,7 @@ func main() {
 	username := os.Getenv("USERNAME")
 	pass := os.Getenv("PASSWORD")
 
+	// Setting up the connection to the "workshop" database
 	dbURL := username + ":" + pass + "@tcp(localhost:3306)/workshop"
 
 	// Open a database connection
@@ -34,35 +35,34 @@ func main() {
 	}
 	defer db.Close()
 
-	// Prepare the stored procedure call
+	// Prepare the call book1 statement for executing later
 	stmt, err := db.Prepare("CALL book1(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
 
-	// Define the workshop IDs, user IDs, and booking dates to use
 	workshopIDs := []int{1, 2}
 	userIDs := []int{1, 2, 3, 4, 5, 6, 7}
 	bookingDates := []string{"2023-03-29"}
 
-	// Define a wait group to synchronize the goroutines
 	var wg sync.WaitGroup
 
-	// Launch multiple goroutines to call the stored procedure concurrently
+	// Launching multiple goroutines
+	// Loop runs 10 times
 	for i := 0; i < 10; i++ {
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
-			// Pick a random workshop, user, and booking date to use
+			// Picking a random workshop, user, and booking date to use
 			r1 := rand.Intn(len(workshopIDs))
 			r2 := rand.Intn(len(userIDs))
 			wid := workshopIDs[r1]
 			uid := userIDs[r2]
 			bdate := bookingDates[0]
 
-			// Call the stored procedure
+			// Calling the stored procedure
 			_, err := stmt.Exec(wid, uid, bdate)
 			if err != nil {
 				fmt.Println(err)
@@ -72,7 +72,7 @@ func main() {
 		}()
 	}
 
-	// Wait for all goroutines to complete
+	// Waiting for all goroutines to complete
 	wg.Wait()
 
 	fmt.Println("All bookings completed")
