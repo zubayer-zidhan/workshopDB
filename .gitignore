@@ -4,7 +4,8 @@
 *.dll
 *.so
 *.dylib
-
+*.mod
+*.sum
 # Environment variables
 *.env
 

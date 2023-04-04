@@ -83,7 +83,7 @@ func main() {
 	// Waiting for all goroutines to complete
 	wg.Wait()
 
-	endTime := time.Now()
+	endTime := time.Since(startTime)
 	fmt.Println(endTime)
 
 	fmt.Println("All bookings completed")
