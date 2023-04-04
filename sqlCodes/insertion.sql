@@ -1,0 +1,1 @@
+insert into cities (name) values  ("Bangalore"), ("Delhi") , ("Guwahati") ;
