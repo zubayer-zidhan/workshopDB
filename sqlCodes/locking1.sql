@@ -22,20 +22,21 @@ BEGIN
         set available_slots = available_slots - 1
         where workshop_id = wid and date = bdate;
 
-        -- Commit the changes to the database
+        -- Commit the changes to the database, release the exclusive lock on slots_availability
         COMMIT;
 
         -- Insert into bookings table doesn't require exclusive lock
         insert into bookings(workshop_id, user_id, booking_date, date_created) values(wid, uid, bdate, now());
        
     else
+        -- Error encountered, rollback, release locks
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'There are no slots available for booking on the given date at the specified workshop.';
     end if;
 
-    select * from bookings;
-    select * from slots_availability;
+    -- select * from bookings;
+    -- select * from slots_availability;
 END $$
 DELIMITER ;
 
