@@ -8,7 +8,7 @@ import (
 	"os"
 	"sync"
 
-	// "time"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 
@@ -25,9 +25,10 @@ func main() {
 
 	username := os.Getenv("USER")
 	pass := os.Getenv("PASSWORD")
+	dbName := os.Getenv("DBNAME")
 
 	// Setting up the connection to the "workshop" database
-	dbURL := username + ":" + pass + "@tcp(localhost:3306)/workshop"
+	dbURL := username + ":" + pass + "@tcp(localhost:3306)/" + dbName
 
 	// Open a database connection
 	db, err := sql.Open("mysql", dbURL)
@@ -42,6 +43,9 @@ func main() {
 		panic(err)
 	}
 
+	startTime := time.Now()
+	fmt.Println(startTime)
+
 	workshopIDs := []int{1, 2, 3, 4, 5}   // 5 workshops available in db
 	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 57 users available in db
 	bookingDates := []string{"2023-04-05"}
@@ -49,7 +53,7 @@ func main() {
 	var wg sync.WaitGroup
 
 	// Launching multiple goroutines
-	// Loop runs 10 times
+	// Loop runs 20 times
 	for i := 0; i < 20; i++ {
 		wg.Add(1)
 
@@ -78,6 +82,9 @@ func main() {
 
 	// Waiting for all goroutines to complete
 	wg.Wait()
+
+	endTime := time.Now()
+	fmt.Println(endTime)
 
 	fmt.Println("All bookings completed")
 }
