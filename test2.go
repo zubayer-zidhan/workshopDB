@@ -7,23 +7,21 @@ import (
 	"math/rand"
 	"os"
 	"sync"
-
-	// "time"
+	"time"
 
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/joho/godotenv"
 )
 
-func main() {
-
+func test2() {
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal(".env file could not be loaded")
 	}
 
-	username := os.Getenv("USER")
+	username := os.Getenv("USERNAME")
 	pass := os.Getenv("PASSWORD")
 
 	// Setting up the connection to the "workshop" database
@@ -44,13 +42,13 @@ func main() {
 
 	workshopIDs := []int{1, 2, 3, 4, 5}   // 5 workshops available in db
 	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 57 users available in db
-	bookingDates := []string{"2023-04-05"}
+	bookingDates := []string{"2023-03-29"}
 
 	var wg sync.WaitGroup
 
 	// Launching multiple goroutines
 	// Loop runs 10 times
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 
 		go func() {
@@ -70,11 +68,11 @@ func main() {
 			}
 
 			fmt.Printf("Booking completed for workshop %d, user %d, and date %s\n", wid, uid, bdate)
-			// time.Sleep(time.Millisecond * 500)
+			time.Sleep(time.Millisecond * 500)
 		}()
 	}
 
-	// time.Sleep(time.Second * 5)
+	time.Sleep(time.Second * 5)
 
 	// Waiting for all goroutines to complete
 	wg.Wait()
