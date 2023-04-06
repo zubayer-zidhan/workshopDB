@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE PROCEDURE IF NOT EXISTS book1(IN wid INT, IN uid INT, IN bdate DATE)
+CREATE PROCEDURE IF NOT EXISTS book_with_workshop_id(IN wid INT, IN uid INT, IN bdate DATE)
 BEGIN
     -- Declarations
     DECLARE num_slots INT;

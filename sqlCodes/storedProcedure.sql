@@ -24,7 +24,7 @@ DELIMITER ;
 
 
 -- Stored Procedure for booking: [without locking]
--- With locking in "lockin1.sql"
+-- With locking in "book_with_workshop_id.sql"
 DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS book(IN wid INT, IN uid INT, IN bdate DATE)
 BEGIN
@@ -42,5 +42,114 @@ BEGIN
     end if;
     select * from bookings;
     select * from slots_availability;
+END $$
+DELIMITER ;
+
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+    DECLARE workshopsInCity IS INTEGER;
+    SELECT workshopsInCity := id FROM workshops WHERE city_id=cid;
+    SELECT * FROM slots_availability WHERE id in @workshopsInCity;
+END $$
+DELIMITER ;
+
+
+-- *****************************************************
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+    DECLARE workshopsInCity IS INTEGER;
+    SELECT id INTO workshopsInCity FROM workshops WHERE city_id = cid;
+END $$
+DELIMITER ;
+
+-- ************************************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+    DECLARE workshopsInCity IS VARCHAR(1000);
+    DECLARE query IS VARCHAR(500);
+
+    SELECT GROUP_CONCAT(id) INTO workshopsInCity FROM workshops WHERE city_id = cid;
+    SET query = CONCAT('SELECT * FROM slots_availability WHERE id IN (', workshopsInCity, ')');
+    PREPARE stmt FROM query;
+    EXECUTE stmt;
+END $$
+DELIMITER ;
+
+
+-- ************************************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+
+    CURSOR workshopsInCity
+    SELECT id FROM workshops WHERE city_id = cid;
+
+    SELECT * FROM slots_availability where id in workshopsInCity;
+END $$
+DELIMITER ;
+
+
+-- ******************************* Subquery  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+    SELECT * FROM slots_availability where workshop_id in (
+        SELECT id from workshops where city_id = cid
+    );
+END $$
+DELIMITER ;
+
+
+
+
+
+-- *******************************NESTED ARRAY ******************************
+
+
+
+
+
+
+
+
+
+
+
+-- ******************************* CURSOR ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS bTest(IN cid INT)
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE workshop_id INT;
+    
+    -- declare the cursor for the workshops in the city
+    DECLARE workshopsInCity CURSOR FOR SELECT id FROM workshops WHERE city_id = cid;
+    
+    -- declare a handler to deal with any errors that may occur
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    
+    -- open the cursor
+    OPEN workshopsInCity;
+    
+    -- loop through the workshops in the city and fetch their corresponding slots_availability records
+    my_loop: LOOP
+        -- fetch the next workshop id from the cursor
+        FETCH workshopsInCity INTO workshop_id;
+        IF done THEN
+            -- exit the loop if there are no more workshops in the city
+            LEAVE my_loop;
+        END IF;
+        
+        -- select the slots_availability records for the current workshop id
+        SELECT * FROM slots_availability WHERE id = workshop_id;
+    END LOOP;
+    
+    -- close the cursor
+    CLOSE workshopsInCity;
 END $$
 DELIMITER ;
