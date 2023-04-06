@@ -1,0 +1,13 @@
+### For checking if all the slots_availibility fields are zero
+
+number_of_zeros int
+
+select count(*) into number_of_zeros from tempTable where available_slots = 0;
+
+if number_of_zeros = total number of rows in tempTable:
+    [means all slots are filled]
+else:
+    [slots are left]
+
+    ## Select a workshop where available_slots != 0
+    book it

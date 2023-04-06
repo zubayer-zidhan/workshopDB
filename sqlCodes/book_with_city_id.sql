@@ -27,7 +27,6 @@ BEGIN
         where workshop_id = wid and date = bdate
         for update;
     
-
         -- if slots are available, then book   
         if(num_slots > 0) then 
             update slots_availability
