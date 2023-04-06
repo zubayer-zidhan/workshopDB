@@ -1,7 +1,12 @@
 -- Insertion into slots_availability
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS createSlots()
+BEGIN
 INSERT INTO slots_availability (workshop_id, date, available_slots) 
 SELECT id, CURDATE() + INTERVAL 1 DAY, total_slots
 FROM workshops;
+END $$
+DELIMITER ;
 
 -- Afterwards,
 -- Updating slots_availability regularly to reset available_slots, and change date to be the next day

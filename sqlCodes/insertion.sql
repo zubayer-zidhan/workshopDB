@@ -4,11 +4,17 @@ insert into workshops (name, total_slots, city_id) values ("BLR-Workshop1", 4, 1
 
 insert into workshops (name, total_slots, city_id) values ("BLR-Workshop2", 3, 1); 
 
+insert into workshops (name, total_slots, city_id) values ("BLR-Workshop3", 3, 1); 
+
 insert into workshops (name, total_slots, city_id) values ("GHY-Workshop1", 2, 3); 
 
 insert into workshops (name, total_slots, city_id) values ("DLH-Workshop1", 7, 2); 
 
-insert into workshops (name, total_slots, city_id) values ("BLR-Workshop3", 3, 1); 
+insert into workshops (name, total_slots, city_id) values ("GHY-Workshop2", 5, 2); 
+insert into workshops (name, total_slots, city_id) values ("GHY-Workshop3", 4, 2); 
+insert into workshops (name, total_slots, city_id) values ("DLH-Workshop2", 6, 3); 
+insert into workshops (name, total_slots, city_id) values ("DLH-Workshop3", 3, 3); 
+insert into workshops (name, total_slots, city_id) values ("DLH-Workshop4", 4, 3); 
 
 
 
