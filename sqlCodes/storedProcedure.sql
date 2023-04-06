@@ -201,6 +201,115 @@ DELIMITER ;
 
 
 
+-- ******************************* LOOP THROUGH ROWS  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+    DECLARE @CursorTestID INT = 1;
+    DECLARE @RunningTotal BIGINT = 0;
+    DECLARE @RowCnt BIGINT = 0;
+
+    -- get a count of total rows to process 
+    SELECT @RowCnt = COUNT(0) FROM dbo.CursorTest;
+    
+    WHILE @CursorTestID <= @RowCnt
+    BEGIN
+        UPDATE dbo.CursorTest 
+        SET RunningTotal = @RunningTotal  + @CursorTestID
+        WHERE CursorTestID = @CursorTestID;
+
+        SET @RunningTotal += @CursorTestID
+            
+        SET @CursorTestID = @CursorTestID + 1 
+    END
+
+END $$
+DELIMITER ;
+
+
+
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
+
+
+
 -- *******************************  ******************************
 DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
