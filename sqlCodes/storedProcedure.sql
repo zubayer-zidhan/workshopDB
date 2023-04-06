@@ -2,6 +2,7 @@
 DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS createSlots()
 BEGIN
+TRUNCATE slots_availability;
 INSERT INTO slots_availability (workshop_id, date, available_slots) 
 SELECT id, CURDATE() + INTERVAL 1 DAY, total_slots
 FROM workshops;
