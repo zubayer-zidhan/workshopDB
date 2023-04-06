@@ -14,10 +14,12 @@ BEGIN
     -- START TRANSACTION;
 
     -- Find workshops in a city
-    SET workshop_ids = (SELECT * FROM slots_availability where workshop_id in (
+    CREATE TEMPORARY TABLE same_city_workshops SELECT * FROM slots_availability where workshop_id in (
         SELECT id from workshops where city_id = cid
-    ));
+    );
 
+
+    
 
     -- for workshop in workshops_ids 
         select available_slots into num_slots
