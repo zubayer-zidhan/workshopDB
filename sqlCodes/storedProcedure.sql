@@ -153,3 +153,61 @@ BEGIN
     CLOSE workshopsInCity;
 END $$
 DELIMITER ;
+
+
+
+SET workshop_ids = (SELECT * FROM slots_availability where workshop_id in (
+        SELECT id from workshops where city_id = cid
+    ));
+
+
+
+
+
+-- ******************************* TEst ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    DECLARE workshop_ids INTARRAY;
+    
+    SET workshop_ids = (SELECT * FROM slots_availability where workshop_id in (
+        SELECT id from workshops where city_id = cid
+    ));
+    
+    SELECT * FROM  workshop_ids;
+END $$
+DELIMITER ;
+
+
+
+
+
+-- ******************************* TEMP TABLE ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test2(IN cid INT)
+BEGIN
+
+    CREATE TEMPORARY TABLE same_city_workshops SELECT * FROM slots_availability where workshop_id in (
+        SELECT id from workshops where city_id = cid
+    );
+    
+    SELECT * FROM  same_city_workshops;
+
+
+END $$
+DELIMITER ;
+
+
+
+
+
+-- *******************************  ******************************
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS test1(IN cid INT)
+BEGIN
+    
+
+
+
+END $$
+DELIMITER ;
