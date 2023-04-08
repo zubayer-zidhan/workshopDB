@@ -23,7 +23,7 @@ BEGIN
     -- If there are workshops with more than zero slots left, insert into booking
     if (num_zeros != total_rows) then
         -- Select 1 wid from same_city_workshops
-        select workshop_id into wid from same_city_workshops where date = bdate limit 0, 1;
+        select workshop_id into wid from same_city_workshops where available_slots <> 0 and date = bdate limit 0, 1;
 
         -- Call book with wid
         call book_with_workshop_id(wid, uid, bdate); 
