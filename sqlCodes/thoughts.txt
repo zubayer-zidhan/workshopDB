@@ -15,25 +15,25 @@ else:
 //Cursor approach
 
     DECLARE @MyCursor CURSOR;
-DECLARE @MyField YourFieldDataType;
-BEGIN
-    SET @MyCursor = CURSOR FOR
-    select top 1000 YourField from dbo.table
-        where StatusID = 7      
-
-    OPEN @MyCursor 
-    FETCH NEXT FROM @MyCursor 
-    INTO @MyField
-
-    WHILE @@FETCH_STATUS = 0
+    DECLARE @MyField YourFieldDataType;
     BEGIN
-      /*
-         YOUR ALGORITHM GOES HERE   
-      */
-      FETCH NEXT FROM @MyCursor 
-      INTO @MyField 
-    END; 
+        SET @MyCursor = CURSOR FOR
+        select top 1000 YourField from dbo.table
+            where StatusID = 7      
 
-    CLOSE @MyCursor ;
-    DEALLOCATE @MyCursor;
-END;
+        OPEN @MyCursor 
+        FETCH NEXT FROM @MyCursor 
+        INTO @MyField
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+        /*
+            YOUR ALGORITHM GOES HERE   
+        */
+        FETCH NEXT FROM @MyCursor 
+        INTO @MyField 
+        END; 
+
+        CLOSE @MyCursor ;
+        DEALLOCATE @MyCursor;
+    END;
