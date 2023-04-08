@@ -1,5 +1,6 @@
+-- Using stored procedure book_with_workshop_id
 DELIMITER $$
-CREATE PROCEDURE IF NOT EXISTS book_with_city_id(IN cid INT, IN uid INT, IN bdate DATE)
+CREATE PROCEDURE IF NOT EXISTS book_with_city_id2(IN cid INT, IN uid INT, IN bdate DATE)
 BEGIN
     -- Declarations
     DECLARE wid INT;
@@ -24,12 +25,8 @@ BEGIN
         -- Select 1 wid from same_city_workshops
         select workshop_id into wid from same_city_workshops where date = bdate limit 0, 1;
 
-
-        update slots_availability
-        set available_slots = available_slots - 1
-        where workshop_id = wid and date = bdate;
-
-        insert into bookings(workshop_id, user_id, booking_date, date_created) values(wid, uid, bdate, now());
+        -- Call book with wid
+        call book_with_workshop_id(wid, uid, bdate); 
 
     end if;
 
