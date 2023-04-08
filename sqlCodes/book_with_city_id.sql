@@ -8,6 +8,9 @@ BEGIN
 
     -- Find workshops in a city
     DROP TABLE IF EXISTS same_city_workshops;
+
+
+    -- TODO: Need to lock the temp table ???
     CREATE TEMPORARY TABLE same_city_workshops SELECT * FROM slots_availability where workshop_id in (
         SELECT id from workshops where city_id = cid
     );
@@ -25,16 +28,22 @@ BEGIN
         select workshop_id into wid from same_city_workshops where available_slots <> 0 and date = bdate limit 0, 1;
 
 
+        -- TODO: Get lock on slots_availability table
         update slots_availability
         set available_slots = available_slots - 1
         where workshop_id = wid and date = bdate;
 
+        -- TODO: Release locks
+
         insert into bookings(workshop_id, user_id, booking_date, date_created) values(wid, uid, bdate, now());
 
+    -- TODO: If no slots, then ROLLBACK
+
+
+    
     end if;
 
 
-    -- If no slots, then ROLLBACK
     
 END $$
 DELIMITER ;
