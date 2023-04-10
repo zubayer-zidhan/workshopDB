@@ -8,33 +8,46 @@ BEGIN
 
     -- Find workshops in a city
     DROP TABLE IF EXISTS same_city_workshops;
-    CREATE TEMPORARY TABLE same_city_workshops SELECT * FROM slots_availability where workshop_id in (
-        SELECT id from workshops where city_id = cid
-    );
+
+
+    -- TODO: Need to lock the temp table ???
+    CREATE TEMPORARY TABLE same_city_workshops (SELECT * FROM slots_availability WHERE workshop_id IN (
+        SELECT id FROM workshops WHERE city_id = cid
+    ) FOR UPDATE);
 
     -- Count total number of workshops with zero slots 
-    select count(*) into num_zeros from same_city_workshops where available_slots = 0;
+    SELECT count(*) INTO num_zeros FROM same_city_workshops WHERE available_slots = 0;
 
     -- Count total number of workshops with a given city_id
-    select count(*) into total_rows from same_city_workshops;
+    SELECT count(*) INTO total_rows FROM same_city_workshops;
 
 
     -- If there are workshops with more than zero slots left, insert into booking
-    if (num_zeros != total_rows) then
+    IF (num_zeros != total_rows) THEN
         -- Select 1 wid from same_city_workshops
-        select workshop_id into wid from same_city_workshops where available_slots <> 0 and date = bdate limit 0, 1;
+        SELECT workshop_id INTO wid FROM same_city_workshops WHERE available_slots <> 0 AND DATE = bdate LIMIT 0, 1;
 
 
-        update slots_availability
-        set available_slots = available_slots - 1
-        where workshop_id = wid and date = bdate;
+        -- TODO: Get lock on slots_availability table
+        UPDATE slots_availability
+        SET available_slots = available_slots - 1
+        WHERE workshop_id = wid AND DATE = bdate;
 
-        insert into bookings(workshop_id, user_id, booking_date, date_created) values(wid, uid, bdate, now());
+        -- TODO: Release locks
+        COMMIT;
 
-    end if;
+
+        INSERT INTO bookings(workshop_id, user_id, booking_date, date_created) VALUES (wid, uid, bdate, now());
+
+    -- TODO: If no slots, then ROLLBACK
+     ELSE
+        -- Error encountered, rollback, release locks
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'There are no slots available for booking on the given date in your city.';
+    END IF;
 
 
-    -- If no slots, then ROLLBACK
     
 END $$
 DELIMITER ;
