@@ -15,7 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-func book_with_city_id() {
+func book_with_workshop_id() {
 
 	// Load environment variables
 	err := godotenv.Load()
@@ -38,7 +38,7 @@ func book_with_city_id() {
 	defer db.Close()
 
 	// Prepare the call book1 statement for executing later
-	stmt, err := db.Prepare("CALL book_with_city_id(?, ?, ?)")
+	stmt, err := db.Prepare("CALL book1(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}

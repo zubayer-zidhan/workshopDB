@@ -38,7 +38,7 @@ BEGIN
         insert into bookings(workshop_id, user_id, booking_date, date_created) values(wid, uid, bdate, now());
 
     -- TODO: If no slots, then ROLLBACK
-
+    
 
     
     end if;
