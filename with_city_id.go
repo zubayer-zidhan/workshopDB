@@ -38,7 +38,7 @@ func main() {
 	defer db.Close()
 
 	// Prepare the call book1 statement for executing later
-	stmt, err := db.Prepare("CALL book_with_workshop_id(?, ?, ?)")
+	stmt, err := db.Prepare("CALL book_with_city_id2(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
@@ -46,7 +46,7 @@ func main() {
 	startTime := time.Now()
 	fmt.Println(startTime)
 
-	workshopIDs := []int{1, 2, 3, 4, 5,6,7,8,9,10}   // 10 workshops available in db
+	cityIDs := []int{1, 2, 3}   // 5 workshops available in db
 	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 57 users available in db
 	bookingDates := []string{"2023-04-10"}
 
@@ -61,19 +61,19 @@ func main() {
 			defer wg.Done()
 
 			// Picking a random workshop, user, and booking date to use
-			r1 := rand.Intn(len(workshopIDs))
+			r1 := rand.Intn(len(cityIDs))
 			r2 := rand.Intn(len(userIDs))
-			wid := workshopIDs[r1]
+			cid := cityIDs[r1]
 			uid := userIDs[r2]
 			bdate := bookingDates[0]
 
 			// Calling the stored procedure
-			_, err := stmt.Exec(wid, uid, bdate)
+			_, err := stmt.Exec(cid, uid, bdate)
 			if err != nil {
 				fmt.Println(err)
 			}
 
-			fmt.Printf("Booking completed for workshop %d, user %d, and date %s\n", wid, uid, bdate)
+			fmt.Printf("Booking completed for workshop %d, user %d, and date %s\n", cid, uid, bdate)
 			// time.Sleep(time.Millisecond * 500)
 		}()
 	}
