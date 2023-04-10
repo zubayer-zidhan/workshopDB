@@ -17,6 +17,9 @@ import (
 
 func book_with_city_id() {
 
+	cid := 3
+	bdate := "2023-04-11"
+
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
@@ -38,7 +41,7 @@ func book_with_city_id() {
 	defer db.Close()
 
 	// Prepare the call book1 statement for executing later
-	stmt, err := db.Prepare("CALL book_with_city_id(?, ?, ?)")
+	stmt, err := db.Prepare("CALL book_with_city_id2(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
@@ -46,34 +49,29 @@ func book_with_city_id() {
 	startTime := time.Now()
 	fmt.Println(startTime)
 
-	workshopIDs := []int{1, 2, 3, 4, 5}   // 5 workshops available in db
-	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 57 users available in db
-	bookingDates := []string{"2023-04-05"}
+	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 7 users available in db
 
 	var wg sync.WaitGroup
 
 	// Launching multiple goroutines
 	// Loop runs 20 times
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 21; i++ {
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
 			// Picking a random workshop, user, and booking date to use
-			r1 := rand.Intn(len(workshopIDs))
-			r2 := rand.Intn(len(userIDs))
-			wid := workshopIDs[r1]
-			uid := userIDs[r2]
-			bdate := bookingDates[0]
+			r1 := rand.Intn(len(userIDs))
+			uid := userIDs[r1]
 
 			// Calling the stored procedure
-			_, err := stmt.Exec(wid, uid, bdate)
+			_, err := stmt.Exec(cid, uid, bdate)
 			if err != nil {
 				fmt.Println(err)
 			}
 
-			fmt.Printf("Booking completed for workshop %d, user %d, and date %s\n", wid, uid, bdate)
+			fmt.Printf("Booking completed for city %d, user %d, and date %s\n", cid, uid, bdate)
 			// time.Sleep(time.Millisecond * 500)
 		}()
 	}
