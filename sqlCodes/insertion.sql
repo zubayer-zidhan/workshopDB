@@ -26,7 +26,7 @@ insert into workshops (name, total_slots, city_id) values ("BLR-Workshop2", 3, 1
 
 insert into workshops (name, total_slots, city_id) values ("BLR-Workshop3", 3, 1); 
 
-insert into workshops (name, total_slots, city_id) values ("GHY-Workshop1", 2, 2; 
+insert into workshops (name, total_slots, city_id) values ("GHY-Workshop1", 2, 2); 
 
 insert into workshops (name, total_slots, city_id) values ("DLH-Workshop1", 7, 3); 
 
