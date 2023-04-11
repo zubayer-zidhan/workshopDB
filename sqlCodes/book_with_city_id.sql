@@ -25,7 +25,7 @@ BEGIN
     -- If there are workshops with more than zero slots left, insert into booking
     IF (num_zeros != total_rows) THEN
         -- Select 1 wid from same_city_workshops
-        SELECT workshop_id INTO wid FROM same_city_workshops WHERE available_slots <> 0 AND DATE = bdate LIMIT 0, 1;
+        SELECT workshop_id INTO wid FROM same_city_workshops WHERE available_slots > 0 AND DATE = bdate LIMIT 0, 1;
 
 
         -- TODO: Get lock on slots_availability table

@@ -18,7 +18,7 @@ import (
 func book_with_city_id() {
 
 	cid := 3
-	bdate := "2023-04-11"
+	bdate := "2023-04-12"
 
 	// Load environment variables
 	err := godotenv.Load()
@@ -41,7 +41,7 @@ func book_with_city_id() {
 	defer db.Close()
 
 	// Prepare the call book1 statement for executing later
-	stmt, err := db.Prepare("CALL book_with_city_id2(?, ?, ?)")
+	stmt, err := db.Prepare("CALL book_with_city_id(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
@@ -55,7 +55,7 @@ func book_with_city_id() {
 
 	// Launching multiple goroutines
 	// Loop runs 20 times
-	for i := 0; i < 21; i++ {
+	for i := 0; i < 25; i++ {
 		wg.Add(1)
 
 		go func() {
