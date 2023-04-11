@@ -6,6 +6,7 @@ BEGIN
     DECLARE num_zeros INT;
     DECLARE total_rows INT;
 
+    START TRANSACTION;
     -- Find workshops in a city
     DROP TABLE IF EXISTS same_city_workshops;
 
