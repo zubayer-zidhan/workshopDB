@@ -6,15 +6,14 @@ BEGIN
     DECLARE num_zeros INT;
     DECLARE total_rows INT;
 
-    START TRANSACTION;
     -- Find workshops in a city
-    DROP TABLE IF EXISTS same_city_workshops;
 
 
     -- TODO: Need to lock the temp table ???
+	SELECT GET_LOCK("same_city_workshops_lock", 5);
     CREATE TEMPORARY TABLE same_city_workshops (SELECT * FROM slots_availability WHERE workshop_id IN (
         SELECT id FROM workshops WHERE city_id = cid
-    ) FOR UPDATE);
+    ));
 
     -- Count total number of workshops with zero slots 
     SELECT count(*) INTO num_zeros FROM same_city_workshops WHERE available_slots = 0;
@@ -35,6 +34,7 @@ BEGIN
         WHERE workshop_id = wid AND DATE = bdate;
 
         -- TODO: Release locks
+        SELECT RELEASE_LOCK("same_city_workshops_lock");
         COMMIT;
 
 
