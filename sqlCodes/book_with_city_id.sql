@@ -40,14 +40,13 @@ BEGIN
         INSERT INTO bookings(workshop_id, user_id, booking_date, date_created) VALUES (wid, uid, bdate, now());
 
     -- TODO: If no slots, then ROLLBACK
-     ELSE
+    ELSE
         -- Error encountered, rollback, release locks
         ROLLBACK;
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'There are no slots available for booking on the given date in your city.';
     END IF;
 
-
-    
+   DROP TABLE IF EXISTS same_city_workshops; 
 END $$
 DELIMITER ;
