@@ -18,7 +18,7 @@ import (
 func book_with_city_id() {
 
 	cid := 3
-	bdate := "2023-04-11"
+	bdate := "2023-04-12"
 
 	// Load environment variables
 	err := godotenv.Load()
