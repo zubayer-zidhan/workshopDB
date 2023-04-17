@@ -21,7 +21,6 @@ func book_with_city_id() {
 	bdate := "2023-04-19"
 
 	// Return 3 by default, denotes failure
-	var retStatus int
 
 	// Load environment variables
 	err := godotenv.Load()
@@ -69,18 +68,23 @@ func book_with_city_id() {
 			uid := userIDs[r1]
 
 			// Calling the stored procedure
-			// err := stmt.QueryRow(cid, uid, bdate).Scan(&retStatus)
-			_, err := stmt.Exec(cid, uid, bdate)
-			if err != nil {
-				fmt.Println(err)
+			// Selecting the output of the stored procedure into "retStatus"
+			var retStatus int
+			err2 := stmt.QueryRow(cid, uid, bdate).Scan(&retStatus)
+			if err2 != nil {
+				fmt.Println(err2)
 			}
 
-			fmt.Printf("Booking completed for city %d, user %d, and date %s, return status %d\n", cid, uid, bdate, retStatus)
-			// time.Sleep(time.Millisecond * 500)
+			if retStatus == 10 {
+				fmt.Printf("Booked successfully for city %d, user %d, on %s\n", cid, uid, bdate)
+			} else if retStatus == 20 {
+				fmt.Println("Booking unsuccessful. All available slots have already been booked for the given city.")
+			} else {
+				fmt.Println("Booking failed.")
+			}
+
 		}()
 	}
-
-	// time.Sleep(time.Second * 5)
 
 	// Waiting for all goroutines to complete
 	wg.Wait()
