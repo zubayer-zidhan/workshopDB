@@ -20,8 +20,6 @@ func book_with_city_id() {
 	cid := 3
 	bdate := "2023-04-19"
 
-	// Return 3 by default, denotes failure
-
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
