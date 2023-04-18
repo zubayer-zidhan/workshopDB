@@ -76,7 +76,7 @@ func book_with_city_id() {
 			if retStatus == 10 {
 				fmt.Printf("Booked successfully for city %d, user %d, on %s\n", cid, uid, bdate)
 			} else if retStatus == 20 {
-				fmt.Println("Booking unsuccessful. All available slots have already been booked for the given city.")
+				fmt.Printf("Booking unsuccessful for city %d, user %d, on %s. All available slots have already been booked for the given city.\n", cid, uid, bdate)
 			} else {
 				fmt.Println("Booking failed.")
 			}

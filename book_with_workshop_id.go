@@ -82,7 +82,7 @@ func book_with_workshop_id() {
 			if retStatus == 10 {
 				fmt.Printf("Booked successfully for workshop %d, user %d, on %s\n", wid, uid, bdate)
 			} else if retStatus == 20 {
-				fmt.Println("Booking unsuccessful. All available slots have already been booked for the given city.")
+				fmt.Printf("Booking unsuccessful for workshop %d, user %d, on %s. All available slots have already been booked for the given city.\n", wid, uid, bdate)
 			} else {
 				fmt.Println("Booking failed.")
 			}

@@ -15,6 +15,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// Book using workshopID: takes in the sql statement, workshop id, user id, and booking date
 func useWorkshopID(stmt *sql.Stmt, wid int, uid int, bdate string) {
 	var retStatus int
 	err2 := stmt.QueryRow(wid, uid, bdate).Scan(&retStatus)
@@ -25,11 +26,13 @@ func useWorkshopID(stmt *sql.Stmt, wid int, uid int, bdate string) {
 	if retStatus == 10 {
 		fmt.Printf("Booked successfully for workshop %d, user %d, on %s\n", wid, uid, bdate)
 	} else if retStatus == 20 {
-		fmt.Println("Booking unsuccessful for workshop %d, user %d, on %s. All available slots have already been booked for the given city.", wid, uid, bdate)
+		fmt.Printf("Booking unsuccessful for workshop %d, user %d, on %s. All available slots have already been booked for the given city.\n", wid, uid, bdate)
 	} else {
 		fmt.Println("Booking failed.")
 	}
 }
+
+// Book using cityID: takes in the sql statement, city id, user id, and booking date
 func useCityID(stmt *sql.Stmt, cid int, uid int, bdate string) {
 	var retStatus int
 	err2 := stmt.QueryRow(cid, uid, bdate).Scan(&retStatus)
@@ -40,7 +43,7 @@ func useCityID(stmt *sql.Stmt, cid int, uid int, bdate string) {
 	if retStatus == 10 {
 		fmt.Printf("Booked successfully for city %d, user %d, on %s\n", cid, uid, bdate)
 	} else if retStatus == 20 {
-		fmt.Println("Booking unsuccessful for city %d, user %d, on %s. All available slots have already been booked for the given city.", cid, uid, bdate)
+		fmt.Printf("Booking unsuccessful for city %d, user %d, on %s. All available slots have already been booked for the given city.\n", cid, uid, bdate)
 	} else {
 		fmt.Println("Booking failed.")
 	}
@@ -101,7 +104,7 @@ func book() {
 	var wg sync.WaitGroup
 
 	// Launching multiple goroutines
-	// Loop runs 20 times
+	// Loop runs x times
 	for i := 0; i < 5; i++ {
 		wg.Add(1)
 
@@ -122,7 +125,7 @@ func book() {
 				// Call the useWorkshopID function
 				useWorkshopID(stmt1, wid, uid, bdate)
 
-			} else if randomNumber == 2 {
+			} else {
 				// Book with city id
 				r3 := rand.Intn(len_cityIDs)
 				cid := cityIDs[r3]
@@ -140,5 +143,5 @@ func book() {
 	endTime := time.Since(startTime)
 	fmt.Println(endTime)
 
-	fmt.Println("All bookings completed")
+	fmt.Println("All operations completed")
 }
