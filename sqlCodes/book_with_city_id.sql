@@ -1,5 +1,5 @@
 DELIMITER $$
-CREATE PROCEDURE IF NOT EXISTS book_with_city_id(IN cid INT, IN uid INT, IN bdate DATE, OUT retStatus INT)
+CREATE PROCEDURE IF NOT EXISTS book_with_city_id(IN cid INT, IN uid INT, IN bdate DATE)
 BEGIN
     -- Declarations
     DECLARE wid INT;
