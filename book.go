@@ -52,7 +52,8 @@ func useCityID(stmt *sql.Stmt, cid int, uid int, bdate string) {
 func book() {
 
 	// Enter hardcoded values here
-	bdate := "2023-04-19"
+	tomorrow := time.Now().AddDate(0, 0, 1)
+	bdate := tomorrow.Format("2006-01-02")
 
 	// Load environment variables
 	err := godotenv.Load()
