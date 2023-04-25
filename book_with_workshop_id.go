@@ -17,6 +17,11 @@ import (
 
 func book_with_workshop_id() {
 
+	wid := 4
+	bdate := "2023-04-19"
+
+	// Return 3 by default, denotes failure
+
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
@@ -38,7 +43,7 @@ func book_with_workshop_id() {
 	defer db.Close()
 
 	// Prepare the call book1 statement for executing later
-	stmt, err := db.Prepare("CALL book1(?, ?, ?)")
+	stmt, err := db.Prepare("CALL book_with_workshop_id(?, ?, ?)")
 	if err != nil {
 		panic(err)
 	}
@@ -46,39 +51,44 @@ func book_with_workshop_id() {
 	startTime := time.Now()
 	fmt.Println(startTime)
 
-	workshopIDs := []int{1, 2, 3, 4, 5}   // 5 workshops available in db
-	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 57 users available in db
-	bookingDates := []string{"2023-04-05"}
+	userIDs := []int{1, 2, 3, 4, 5, 6, 7} // 7 users available in db
+	// workshopIDs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 
 	var wg sync.WaitGroup
 
 	// Launching multiple goroutines
 	// Loop runs 20 times
-	for i := 0; i < 20; i++ {
+	for i := 0; i < 10; i++ {
 		wg.Add(1)
 
 		go func() {
 			defer wg.Done()
 
 			// Picking a random workshop, user, and booking date to use
-			r1 := rand.Intn(len(workshopIDs))
-			r2 := rand.Intn(len(userIDs))
-			wid := workshopIDs[r1]
-			uid := userIDs[r2]
-			bdate := bookingDates[0]
+			r1 := rand.Intn(len(userIDs))
+			uid := userIDs[r1]
+
+			// r2 := rand.Intn(len(workshopIDs))
+			// wid := workshopIDs[r2]
 
 			// Calling the stored procedure
-			_, err := stmt.Exec(wid, uid, bdate)
-			if err != nil {
-				fmt.Println(err)
+			// Selecting the output of the stored procedure into "retStatus"
+			var retStatus int
+			err2 := stmt.QueryRow(wid, uid, bdate).Scan(&retStatus)
+			if err2 != nil {
+				fmt.Println(err2)
 			}
 
-			fmt.Printf("Booking completed for workshop %d, user %d, and date %s\n", wid, uid, bdate)
-			// time.Sleep(time.Millisecond * 500)
+			if retStatus == 10 {
+				fmt.Printf("Booked successfully for workshop %d, user %d, on %s\n", wid, uid, bdate)
+			} else if retStatus == 20 {
+				fmt.Printf("Booking unsuccessful for workshop %d, user %d, on %s. All available slots have already been booked for the given city.\n", wid, uid, bdate)
+			} else {
+				fmt.Println("Booking failed.")
+			}
+
 		}()
 	}
-
-	// time.Sleep(time.Second * 5)
 
 	// Waiting for all goroutines to complete
 	wg.Wait()
