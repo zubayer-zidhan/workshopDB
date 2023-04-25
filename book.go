@@ -92,7 +92,7 @@ func book() {
 
 	// Data available in the database tables
 	userIDs := []int{1, 2, 3, 4, 5, 6, 7}               // 7 users available in db
-	workshopIDs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} // 10 users available in db
+	workshopIDs := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10} // 10 workshops available in db
 	cityIDs := []int{1, 2, 3}                           // 3 cities available in db
 	randomNumbers := []int{1, 2}                        // 2 options, either book with cityID, or workshopID
 
@@ -106,7 +106,7 @@ func book() {
 
 	// Launching multiple goroutines
 	// Loop runs x times
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 100; i++ {
 		wg.Add(1)
 
 		go func() {
