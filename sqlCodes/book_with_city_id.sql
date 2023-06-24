@@ -11,7 +11,7 @@ BEGIN
     -- Find workshops in a city
 	START TRANSACTION;
 
-    -- TODO: Need to lock the temp table ???
+    -- Lock temporary table
 	SELECT GET_LOCK("same_city_workshops_lock", 5) INTO isLocked;
     CREATE TEMPORARY TABLE same_city_workshops (SELECT * FROM slots_availability WHERE DATE = bdate AND workshop_id IN (
         SELECT id FROM workshops WHERE city_id = cid
